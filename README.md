@@ -2,7 +2,11 @@
 
 ## Work in Progress
 
-A lightweight, extensible framework for [steering language models using game-theoretic solvers](https://arxiv.org/abs/2402.01704).
+- [x] Meeting Game. We develop a lightweight, extensible framework for [steering language models using game-theoretic solvers](https://arxiv.org/abs/2402.01704).
+- [x] Prisoner Dilemma Game.
+- [ ] Battle of the sexes.
+
+
 
 ## Installation
 

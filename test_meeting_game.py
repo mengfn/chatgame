@@ -1,6 +1,5 @@
 from game import MeetingGame
-from cfr_solver import CFRSolver
-from llm import chat_with_solver
+from mg_solver import CFRSolver, chat_with_solver
 
 # 1. Initialize game
 valuations = {1:{"Mon":5,"Tue":0,"Wed":3}, 2:{"Mon":0,"Tue":4,"Wed":2}}
