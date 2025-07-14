@@ -4,6 +4,7 @@
 
 - [x] Meeting Game. We develop a lightweight, extensible framework for [steering language models using game-theoretic solvers](https://arxiv.org/abs/2402.01704).
 - [x] Prisoner Dilemma Game.
+- [x] Meeting Game with perfect information.
 - [ ] Battle of the sexes.
 
 
@@ -18,5 +19,5 @@
 ## Usage
 
   ```bash
-   python main.py
+   python test_meeting_game_perfect_40.py
    ```

@@ -118,3 +118,69 @@ class MeetingGame40:
 
     def legal_actions(self, player: int) -> List[str]:
         return self.availability[player]
+
+
+class MeetingGamePerfect40:
+    def __init__(self,
+                 players: List[int],
+                 dates: List[str],
+                 valuations: Dict[int, Dict[str, float]],
+                 availability: Dict[int, List[str]],
+                 max_rounds: int = 3,
+                 unanimous_bonus: float = 100.0):
+        self.players = players
+        self.dates = dates
+        self.valuations = valuations
+        self.availability = availability
+        self.max_rounds = max_rounds
+        self.max_proposals = max_rounds * len(players)
+        self.unanimous_bonus = unanimous_bonus
+
+    def is_terminal(self, history: List[typedef]) -> bool:
+        """
+        Check if the game has reached a terminal state:
+        - unanimous agreement in the last round, or
+        - reached maximum number of proposals
+        """
+        N = len(self.players)
+        # unanimous agreement in the last N moves
+        if len(history) >= N:
+            last = history[-N:]
+            if len({d for (_, d) in last}) == 1:
+                return True
+        # reached the proposal limit
+        return len(history) >= self.max_proposals
+
+    def get_payoff(self, history: List[typedef]) -> Tuple[float, ...]:
+        """
+        Compute payoffs:
+        1) If unanimous agreement, each player gets valuation + unanimous_bonus.
+        2) If max rounds reached without full agreement, reward based on majority slot proportion.
+        3) Otherwise, game is ongoing and payoff is all zeros.
+        """
+        N = len(self.players)
+        # 1) unanimous agreement
+        if len(history) >= N:
+            last = history[-N:]
+            slots = [d for (_, d) in last]
+            if len(set(slots)) == 1:
+                slot = slots[0]
+                return tuple(self.valuations[p][slot] + self.unanimous_bonus
+                             for p in self.players)
+        # 2) max proposals reached without unanimous
+        if len(history) >= self.max_proposals:
+            last = history[-N:]
+            slots = [d for (_, d) in last]
+            counts = Counter(slots)
+            majority_slot, count = counts.most_common(1)[0]
+            proportion = count / N
+            return tuple(self.valuations[p][majority_slot] * proportion
+                         for p in self.players)
+        # 3) non-terminal
+        return tuple(0.0 for _ in self.players)
+
+    def legal_actions(self, player: int) -> List[str]:
+        """
+        Return the list of available time slots for the given player.
+        """
+        return self.availability[player]
